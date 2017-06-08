@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <iomanip>
 
 template<int a, int b, int c>
 struct cubic
@@ -69,7 +70,10 @@ double round(double v, uint64_t places)
 
 std::ostream& operator<<(std::ostream& os, const point& pt)
 {
-	return os << "(" << round(pt.x, 2) << "," << round(pt.y, 2) << ")";
+	return os
+		<< std::fixed
+		<< std::setprecision(1)
+		<< "(" << round(pt.x, 1) << "," << round(pt.y, 1) << ")";
 }
 
 bool between(double v, double l, double u)
