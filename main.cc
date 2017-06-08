@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <iomanip>
 #include <cmath>
+#include <sstream>
 
 template<int a, int b, int c>
 struct cubic
@@ -86,11 +87,11 @@ struct points
 				double ldy = last_dy;
 				if (between(0, dy, ldy))
 				{
-					std::cout << (pt+lpt)/2;
+					ss << (pt+lpt)/2;
 					if (dy > 0)
-						std::cout << "/";
+						ss << "/";
 					if (dy < 0)
-						std::cout << "\\";
+						ss << "\\";
 				}
 
 				double d2y = (dy-ldy)/dx;
@@ -99,28 +100,35 @@ struct points
 					double ld2y = last_d2y;
 					if (between(0, d2y, ld2y))
 					{
-						std::cout << "^" << (pt+lpt)/2;
+						ss << "^" << (pt+lpt)/2;
 						if (dy > 0)
-							std::cout << "/";
+							ss << "/";
 						if (dy < 0)
-							std::cout << "\\";
+							ss << "\\";
 					}
 				}
 				last_d2y = d2y;
 			} else {
 				if (dy > 0)
-					std::cout << "/";
+					ss << "/";
 				if (dy < 0)
-					std::cout << "\\";
+					ss << "\\";
 			}
 			last_dy = dy;
 		}
 		last_pt = pt;
 	}
 
+	std::string sig() const
+	{
+		return ss.str();
+	}
+
+private:
 	nullable<point> last_pt;
 	nullable<double> last_dy;
 	nullable<double> last_d2y;
+	std::stringstream ss;
 };
 
 int main()
@@ -131,6 +139,6 @@ int main()
 		cubic<1, 12, 0> c(x);
 		pts.track(x, c.y);
 	}
-	std::cout << std::endl;
+	std::cout << pts.sig() << std::endl;
 	return 0;
 }
