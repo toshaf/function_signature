@@ -99,7 +99,7 @@ struct points
 					double ld2y = last_d2y;
 					if (between(0, d2y, ld2y))
 					{
-						std::cout << (pt+lpt)/2;
+						std::cout << "^" << (pt+lpt)/2;
 						if (dy > 0)
 							std::cout << "/";
 						if (dy < 0)
