@@ -32,6 +32,16 @@ struct point
 	double x, y;
 };
 
+point operator+(const point& a, const point& b)
+{
+	return point(a.x+b.x, a.y+b.y);
+}
+
+point operator/(const point& a, double f)
+{
+	return point(a.x/f, a.y/f);
+}
+
 std::ostream& operator<<(std::ostream& os, const point& pt)
 {
 	return os << "(" << pt.x << "," << pt.y << ")";
@@ -57,8 +67,7 @@ struct points
 				double ldy = last_dy;
 				if (between(0, dy, ldy))
 					std::cout
-						<< "stationary point between " << lpt
-						<< " and " << pt
+						<< "stationary point around " << (pt+lpt)/2
 						<< std::endl;
 
 				double d2y = (dy-ldy)/dx;
@@ -67,8 +76,7 @@ struct points
 					double ld2y = last_d2y;
 					if (between(0, d2y, ld2y))
 						std::cout
-							<< "inflection point between " << lpt
-							<< " and " << pt
+							<< "inflection point around " << (pt+lpt)/2
 							<< std::endl;
 				}
 				last_d2y = d2y;
@@ -86,7 +94,7 @@ struct points
 int main()
 {
 	points pts;
-	for (double x = -20; x <= 10; x+=0.1)
+	for (double x = -20; x <= 10; x+=0.001)
 	{
 		cubic<1, 12, 0> c(x);
 		pts.track(x, c.y);
