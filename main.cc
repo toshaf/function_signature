@@ -42,9 +42,34 @@ point operator/(const point& a, double f)
 	return point(a.x/f, a.y/f);
 }
 
+template<typename T>
+int sign(T v)
+{
+	return v < 0 ? -1 : 1;
+}
+
+template<typename T>
+double pow(T v, uint64_t p)
+{
+	if (p == 0)
+		return 1;
+
+	T r = v;
+	for (int i; i < p; ++i)
+		r = r * 10;
+	
+	return r;
+}
+
+double round(double v, uint64_t places)
+{
+	double f = pow(10, places);
+	return ((int64_t)(v*f+0.5*sign(v)))/f;
+}
+
 std::ostream& operator<<(std::ostream& os, const point& pt)
 {
-	return os << "(" << pt.x << "," << pt.y << ")";
+	return os << "(" << round(pt.x, 2) << "," << round(pt.y, 2) << ")";
 }
 
 bool between(double v, double l, double u)
@@ -66,20 +91,33 @@ struct points
 			{
 				double ldy = last_dy;
 				if (between(0, dy, ldy))
-					std::cout
-						<< "stationary point around " << (pt+lpt)/2
-						<< std::endl;
+				{
+					std::cout << (pt+lpt)/2;
+					if (dy > 0)
+						std::cout << "/";
+					if (dy < 0)
+						std::cout << "\\";
+				}
 
 				double d2y = (dy-ldy)/dx;
 				if (last_d2y.has())
 				{
 					double ld2y = last_d2y;
 					if (between(0, d2y, ld2y))
-						std::cout
-							<< "inflection point around " << (pt+lpt)/2
-							<< std::endl;
+					{
+						std::cout << (pt+lpt)/2;
+						if (dy > 0)
+							std::cout << "/";
+						if (dy < 0)
+							std::cout << "\\";
+					}
 				}
 				last_d2y = d2y;
+			} else {
+				if (dy > 0)
+					std::cout << "/";
+				if (dy < 0)
+					std::cout << "\\";
 			}
 			last_dy = dy;
 		}
@@ -99,5 +137,6 @@ int main()
 		cubic<1, 12, 0> c(x);
 		pts.track(x, c.y);
 	}
+	std::cout << std::endl;
 	return 0;
 }
