@@ -52,8 +52,10 @@ int sign(T v)
 
 double round(double v, uint64_t places)
 {
-	double f = std::pow(10, places);
-	return ((int64_t)(v*f+0.5*sign(v)))/f;
+	double scale = std::pow(10, places);
+	int64_t whole = (int64_t)v;
+	double fraction = v-whole;
+	return whole + ((int64_t)(fraction*scale+0.5*sign(v)))/scale;
 }
 
 std::ostream& operator<<(std::ostream& os, const point& pt)
