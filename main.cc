@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <iomanip>
+#include <cmath>
 
 template<int a, int b, int c>
 struct cubic
@@ -49,22 +50,9 @@ int sign(T v)
 	return v < 0 ? -1 : 1;
 }
 
-template<typename T>
-double pow(T v, uint64_t p)
-{
-	if (p == 0)
-		return 1;
-
-	T r = v;
-	for (int i; i < p; ++i)
-		r = r * 10;
-	
-	return r;
-}
-
 double round(double v, uint64_t places)
 {
-	double f = pow(10, places);
+	double f = std::pow(10, places);
 	return ((int64_t)(v*f+0.5*sign(v)))/f;
 }
 
